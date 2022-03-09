@@ -1,6 +1,12 @@
 #include "WorkerManager.h"
 
 
+WorkerManager::WorkerManager()
+{
+	m_num = 0;
+	this->workerArray = NULL;
+}
+
 void WorkerManager::showMenu()
 {
 	cout << "************************************************" << endl;
@@ -23,52 +29,93 @@ void WorkerManager::exitSystem()
 	exit(0);
 }
 
-void WorkerManager::addWorker(int id, string name, int did)
+void WorkerManager::addWorker()
 {
-	switch (did)
+	int num = 0;	//增加人数变量
+	int id = 0;		//职工编号变量
+	string name;	//姓名变量
+	int did = 0;	//岗位编号变量
+	cout << "请输入想要增加职工的人数:" << endl;
+	cin >> num;
+	if (num > 0)    //输入增加人数正确
 	{
-	case EmployeeDepId:	//岗位是员工
-		worker = new Employee(id, name, did);
-		break;
-	case ManagerDepId:	//岗位是经理
-		worker = new Manager(id, name,did);
-		break;
-	case BossDepId:		//岗位是老板
-		worker = new Boss(id, name, did);
-		break;
-	default:
-		break;
-	}
-}
+		int New_num = this->m_num + num;
+		Worker ** New_WorkerArray = new Worker*[New_num];
+		//复制原有数组this->WorkerArray到新数组New_WorkerArray
+		for (int i = 0; i < this->m_num; i++)
+		{
+			New_WorkerArray[i] = this->workerArray[i];
+		}
+		for (int i = 0; i < num; i++)
+		{
+			cout << "请输入第" << i + 1 << "个职工的职工编号:" << endl;
+			cin >> id;
+			cout << "请输入第" << i + 1 << "个职工的姓名:" << endl;
+			cin >> name;
+			cout << "请选择该职工的岗位:" << endl;
+			cout << "1、老板" << endl;
+			cout << "2、经理" << endl;
+			cout << "3、员工" << endl;
+			cin >> did;
+			Worker * worker = NULL;
+			switch (did)
+			{
+			case EmployeeDepId:	//岗位是员工
+				worker = new Employee(id, name, did);
+				break;
+			case ManagerDepId:	//岗位是经理
+				worker = new Manager(id, name, did);
+				break;
+			case BossDepId:		//岗位是老板
+				worker = new Boss(id, name, did);
+				break;
+			default:
+				break;
+			}
+			New_WorkerArray[this->m_num + i] = worker;
+		}
+		//释放原有空间
+		delete[] this->workerArray;
 
-void WorkerManager::addWorkerArray(int num)
-{
-	workerArray = new Worker*[num];
-	for (int i = 0; i < num; i++)
+		//更改新空间的指向
+		this->workerArray = New_WorkerArray;
+
+		//更新职工数量
+		this->m_num = New_num;
+
+		//提示信息
+		cout << "成功添加" << num << "个职工" << endl;
+	}
+	else    //输入增加人数错误
 	{
-		workerArray[i] = worker;
+		cout << "输入有误" << endl;
 	}
 }
 
 void WorkerManager::showInfo()
 {
-	int num = sizeof(this->workerArray)/4;
-	cout << num;
-	if (num == 0)
+	if (this->m_num > 0)
 	{
-		cout << "职工列表为空" << endl;
-		return;
-	}
-	else
-	{
-		for (int i = 0; i < num; i++)
+		for (int i = 0; i < this->m_num; i++)
 		{
 			cout << this->workerArray[i]->m_Id << "   "
 				<< this->workerArray[i]->m_Name << "   "
 				<< this->workerArray[i]->m_DepId << endl;
 		}
 	}
+	else
+	{
+		cout << "职工列表为空" << endl;
+	}
+}
 
+WorkerManager::~WorkerManager()
+{
+	if (this->workerArray != NULL)
+	{
+		delete this->workerArray;
+		this->workerArray = NULL;
+	}
 }
 
 

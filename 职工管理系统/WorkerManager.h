@@ -12,17 +12,20 @@
 class WorkerManager
 {
 public:
+	WorkerManager();	//构造函数
+
 	void showMenu();	//显示菜单功能
 
 	void exitSystem();   //退出系统功能
 
-	void addWorker(int id,string name,int did);	//增加职工
+	void addWorker();	//增加职工
 
-	void addWorkerArray(int num);	
 
 	void showInfo();
 
+	~WorkerManager();
+
 public:
-	Worker * worker;
-	Worker ** workerArray;
+	int m_num;					//职工数量
+	Worker ** workerArray;		//存放职工指针的数组
 };

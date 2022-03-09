@@ -20,28 +20,8 @@ void main()
 			break;
 		case 1:		//增加职工信息
 		{
-			int num;	//增加人数变量
-			int id = 0;		//职工编号变量
-			string name;	//姓名变量
-			int did = 0;	//岗位编号变量
-			cout << "请输入想要增加职工的人数:" << endl;
-			cin >> num;
-			for (int i = 0; i < num; i++)
-			{
-				cout << "请输入第" << i + 1 << "个职工的职工编号:" << endl;
-				cin >> id;
-				cout << "请输入第" << i + 1 << "个职工的姓名:" << endl;
-				cin >> name;
-				cout << "请选择该职工的岗位:" << endl;
-				cout << "1、老板" << endl;
-				cout << "2、经理" << endl;
-				cout << "3、员工" << endl;
-				cin >> did;
-				//增加职工
-				wm->addWorker(id, name, did);
-				wm->addWorkerArray(num);
-
-			}
+			wm->addWorker();
+			system("pause");
 			system("cls");
 			break;
 		}
