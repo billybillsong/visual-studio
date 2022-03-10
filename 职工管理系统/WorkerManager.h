@@ -24,13 +24,16 @@ public:
 
 	void save();		//保存到文件
 
-	bool readFile();	//读文件
+	int  getNumFromFile();	//读文件有几行数据
 
 	void showInfo();
+
+	void initWorkerArray();  //文件有数据初始化WorkerArray
 
 	~WorkerManager();
 
 public:
 	int m_num;					//职工数量
 	Worker ** workerArray;		//存放职工指针的数组
+	bool fileIsEmpty;            //文件是否是空
 };

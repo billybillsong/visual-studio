@@ -4,8 +4,41 @@
 WorkerManager::WorkerManager()
 {
 
-	m_num = 0;
-	this->workerArray = NULL;
+	//m_num = 0;
+	//this->workerArray = NULL;
+
+	//初始化分三种情况
+	//1、没有文件              初始化为空
+	//2、有文件没有数据        初始化为空
+	//3、有文件有数据          依据数据初始化
+
+	//1、没有文件
+	ifstream ifs(FileName, ios::in);
+	if (!ifs.is_open())
+	{
+		this->m_num = 0;              //初始化员工数量
+		this->workerArray = NULL;     //初始化员工列表
+		this->fileIsEmpty = true;     //初始化文件是否为空
+		ifs.close();
+	}
+
+	//2、有文件没有数据
+	char ch;
+	ifs >> ch;		//读一个数据
+	if (ifs.eof())	//读到EOF了
+	{
+		this->m_num = 0;              //初始化员工数量
+		this->workerArray = NULL;     //初始化员工列表
+		this->fileIsEmpty = true;     //初始化文件是否为空
+		ifs.close();
+	}
+
+	//3、有文件有数据
+	this->m_num = this->getNumFromFile();	//初始化员工数量
+	this->fileIsEmpty = false;              //初始化文件是否为空
+	this->workerArray = new Worker*[this->m_num];    //给workerArray开辟空间
+	this->initWorkerArray();                //初始化员工列表
+
 }
 
 void WorkerManager::showMenu()
@@ -113,20 +146,19 @@ void WorkerManager::save()
 
 }
 
-bool WorkerManager::readFile()
+int WorkerManager::getNumFromFile()
 {
 	ifstream ifs(FileName, ios::in);
-	if (!ifs.is_open())		//没有FileName文件
+	int num = 0;
+	int id;
+	string name;
+	int did;
+	while (ifs>>id && ifs>>name && ifs>>did)
 	{
-
+		num++;
 	}
-	else    //有FileName文件
-	{
-		cout << "文件打开成功" << endl;
-	}
-
-	
-	return false;
+	ifs.close();
+	return num;
 }
 
 
@@ -146,6 +178,35 @@ void WorkerManager::showInfo()
 	{
 		cout << "职工列表为空" << endl;
 	}
+}
+
+void WorkerManager::initWorkerArray()
+{
+	ifstream ifs(FileName, ios::in);
+	int id;
+	string name;
+	int did;
+	int index = 0;   //计数
+	while (ifs>>id && ifs>>name && ifs>>did)
+	{
+		switch (did)
+		{
+		case EmployeeDepId:
+			this->workerArray[index] = new Employee(id,name,did);
+			break;
+		case ManagerDepId:
+			this->workerArray[index] = new Manager(id, name, did);
+			break;
+		case BossDepId:
+			this->workerArray[index] = new Boss(id, name, did);
+			break;
+		default:
+			break;
+		}
+		index++;
+	}
+	ifs.close();
+
 }
 
 WorkerManager::~WorkerManager()

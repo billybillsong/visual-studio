@@ -7,7 +7,6 @@ using namespace std;
 void main()
 {
 	WorkerManager * wm = new WorkerManager();
-	wm->readFile();
 	int choice = 0;
 	while (true)
 	{
