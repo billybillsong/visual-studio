@@ -3,6 +3,7 @@
 
 WorkerManager::WorkerManager()
 {
+
 	m_num = 0;
 	this->workerArray = NULL;
 }
@@ -83,6 +84,9 @@ void WorkerManager::addWorker()
 		//更新职工数量
 		this->m_num = New_num;
 
+		//将职工列表写入文件
+		this->save();
+
 		//提示信息
 		cout << "成功添加" << num << "个职工" << endl;
 	}
@@ -91,6 +95,41 @@ void WorkerManager::addWorker()
 		cout << "输入有误" << endl;
 	}
 }
+
+void WorkerManager::save()
+{
+	ofstream ofs(FileName, ios::out);
+
+	//示例写文件格式
+	//1 张三 1
+	for (int i = 0; i < this->m_num; i++)
+	{
+		ofs << this->workerArray[i]->m_Id << " "
+			<< this->workerArray[i]->m_Name<<" "
+			<< this->workerArray[i]->m_DepId << endl;
+	}
+
+	ofs.close();
+
+}
+
+bool WorkerManager::readFile()
+{
+	ifstream ifs(FileName, ios::in);
+	if (!ifs.is_open())		//没有FileName文件
+	{
+
+	}
+	else    //有FileName文件
+	{
+		cout << "文件打开成功" << endl;
+	}
+
+	
+	return false;
+}
+
+
 
 void WorkerManager::showInfo()
 {
@@ -113,7 +152,7 @@ WorkerManager::~WorkerManager()
 {
 	if (this->workerArray != NULL)
 	{
-		delete this->workerArray;
+		delete[] this->workerArray;
 		this->workerArray = NULL;
 	}
 }

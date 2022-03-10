@@ -4,9 +4,11 @@
 #include "Manager.h"
 #include "Boss.h"
 #include <string>
+#include <fstream>
 #define EmployeeDepId 3
 #define ManagerDepId 2
 #define BossDepId 1
+#define FileName "WorkerList.txt"
 
 
 class WorkerManager
@@ -20,6 +22,9 @@ public:
 
 	void addWorker();	//增加职工
 
+	void save();		//保存到文件
+
+	bool readFile();	//读文件
 
 	void showInfo();
 
