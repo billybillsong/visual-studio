@@ -38,6 +38,9 @@ public:
 
 	void modifyWorkerInfo();  //修改职工信息
 
+	int makeSureCinIsRight(int a);    //确保输入的是int类型，输入其他错误类型会有提示重新输入
+
+
 	~WorkerManager();
 
 public:

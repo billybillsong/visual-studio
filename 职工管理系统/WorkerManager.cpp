@@ -74,10 +74,11 @@ void WorkerManager::addWorker()
 {
 	int num = 0;	//增加人数变量
 	int id = 0;		//职工编号变量
-	string name;	//姓名变量
+	string name="";	//姓名变量
 	int did = 0;	//岗位编号变量
 	cout << "请输入想要增加职工的人数:" << endl;
-	cin >> num;
+	//cin >> num;
+	num=this->makeSureCinIsRight(num);
 	if (num > 0)    //输入增加人数正确
 	{
 		int New_num = this->m_num + num;
@@ -90,14 +91,16 @@ void WorkerManager::addWorker()
 		for (int i = 0; i < num; i++)
 		{
 			cout << "请输入第" << i + 1 << "个职工的职工编号:" << endl;
-			cin >> id;
+			//cin >> id;
+			id = this->makeSureCinIsRight(id);
 			cout << "请输入第" << i + 1 << "个职工的姓名:" << endl;
 			cin >> name;
 			cout << "请选择该职工的岗位:" << endl;
 			cout << "1、老板" << endl;
 			cout << "2、经理" << endl;
 			cout << "3、员工" << endl;
-			cin >> did;
+			//cin >> did;
+			did = this->makeSureCinIsRight(did);
 			Worker * worker = NULL;
 			switch (did)
 			{
@@ -234,102 +237,144 @@ int WorkerManager::isExist(int num)
 
 void WorkerManager::deleteWorker()
 {
-	int num = 0;
-	cout << "请输入想要删除的职工编号:" << endl;
-	cin >> num;
-	int index = this->isExist(num);     //index为要删除的职工在数组中的位置
-	if (index == -1)    //如果不存在
+	if(this->fileIsEmpty)
 	{
-		cout << "查无此人" << endl;
-		return;
+		cout << "文件不存在或记录为空" << endl;
 	}
-	else                //如果存在
+	else
 	{
-		Worker ** newArray = new Worker*[this->m_num - 1];
-		//for (int i = 0; i < this->m_num; i++)
-		//{
-		//	if (i != index)     //跳过位置为index的员工
-		//	{
-		//		newArray[i] = this->workerArray[i];
-		//	}
-		//	else
-		//	{
-		//		i--;
-		//	}
-		//}
-		//跳过位置为index的员工
-		for (int i = 0; i < index; i++)
+		int num = 0;
+		cout << "请输入想要删除的职工编号:" << endl;
+		//cin >> num;
+		num = this->makeSureCinIsRight(num);
+		int index = this->isExist(num);     //index为要删除的职工在数组中的位置
+		if (index == -1)    //如果不存在
 		{
-			newArray[i] = this->workerArray[i];
+			cout << "查无此人" << endl;
+			return;
 		}
-		for (int i = index + 1; i < this->m_num; i++)
+		else                //如果存在
 		{
-			newArray[i - 1] = this->workerArray[i];
+			Worker ** newArray = new Worker*[this->m_num - 1];
+			//for (int i = 0; i < this->m_num; i++)
+			//{
+			//	if (i != index)     //跳过位置为index的员工
+			//	{
+			//		newArray[i] = this->workerArray[i];
+			//	}
+			//	else
+			//	{
+			//		i--;
+			//	}
+			//}
+			//跳过位置为index的员工
+			for (int i = 0; i < index; i++)
+			{
+				newArray[i] = this->workerArray[i];
+			}
+			for (int i = index + 1; i < this->m_num; i++)
+			{
+				newArray[i - 1] = this->workerArray[i];
+			}
+			delete[] this->workerArray;      //释放原有空间
+			this->workerArray = newArray;    //指向新空间
+			this->m_num--;                   //更新员工数
+			if (this->m_num == 0)
+			{
+				this->fileIsEmpty = true;    //更新文件为空flag
+			}
+			//将职工列表写入文件
+			this->save();
+			cout << "删除员工成功" << endl;
 		}
-		delete[] this->workerArray;      //释放原有空间
-		this->workerArray = newArray;    //指向新空间
-		this->m_num--;                   //更新员工数
-		if (this->m_num == 0)            
-		{
-			this->fileIsEmpty = true;    //更新文件为空flag
-		}
-		//将职工列表写入文件
-		this->save();
-		cout << "删除员工成功" << endl;
 	}
+	
 }
 
 void WorkerManager::modifyWorkerInfo()
 {
-	cout << "请输入想要修改信息的职工编号:" << endl;
-	int num = 0;
-	cin >> num;
-	int index = this->isExist(num);      //index为要删除的职工在数组中的位置
-	if (index == -1)        //如果不存在
+	if (this->fileIsEmpty)
 	{
-		cout << "查无此人" << endl;
-		return;
+		cout << "文件不存在或记录为空" << endl;
 	}
 	else
 	{
-		int id = 0;
-		string name;
-		int did = 0;
-		//记录职工编号
-		cout << "请输入该职工新的职工编号:" << endl;
-		cin >> id;
-		//记录职工姓名
-		cout << "请输入该职工的名字:" << endl;
-		cin >> name;
-		this->workerArray[index]->m_Name = name;
-		//记录职工岗位
-		cout << "请选择该职工的岗位:" << endl;
-		cout << "1、老板" << endl;
-		cout << "2、经理" << endl;
-		cout << "3、员工" << endl;
-		cin >> did;
-		//修改职工信息
-		Worker * worker = NULL;
-		switch (did)
+		cout << "请输入想要修改信息的职工编号:" << endl;
+		int num = 0;
+		//cin >> num;
+		num = this->makeSureCinIsRight(num);
+		int index = this->isExist(num);      //index为要删除的职工在数组中的位置
+		if (index == -1)        //如果不存在
 		{
-		case EmployeeDepId:	//岗位是员工
-			worker = new Employee(id, name, did);
-			break;
-		case ManagerDepId:	//岗位是经理
-			worker = new Manager(id, name, did);
-			break;
-		case BossDepId:		//岗位是老板
-			worker = new Boss(id, name, did);
-			break;
-		default:
-			break;
+			cout << "查无此人" << endl;
+			return;
 		}
-		this->workerArray[index] = worker;
-		//将职工列表写入文件
-		this->save();
-		cout << "修改职工信息成功" << endl;
+		else
+		{
+			int id = 0;
+			string name = "";
+			int did = 0;
+			//记录职工编号
+			cout << "请输入该职工新的职工编号:" << endl;
+			//cin >> id;    
+			id = this->makeSureCinIsRight(id);
+			//记录职工姓名
+			cout << "请输入该职工的名字:" << endl;
+			cin >> name;
+
+			//记录职工岗位
+			cout << "请选择该职工的岗位:" << endl;
+			cout << "1、老板" << endl;
+			cout << "2、经理" << endl;
+			cout << "3、员工" << endl;
+			//cin >> did;
+			did = this->makeSureCinIsRight(did);
+			//修改职工信息
+			Worker * worker = NULL;
+			switch (did)
+			{
+			case EmployeeDepId:	//岗位是员工
+				worker = new Employee(id, name, did);
+				break;
+			case ManagerDepId:	//岗位是经理
+				worker = new Manager(id, name, did);
+				break;
+			case BossDepId:		//岗位是老板
+				worker = new Boss(id, name, did);
+				break;
+			default:
+				break;
+			}
+			delete this->workerArray[index];   //释放掉要修改信息的职工原始空间
+			this->workerArray[index] = worker;   //更新数据到数组中
+			//将职工列表写入文件
+			this->save();
+			cout << "修改职工信息成功" << endl;
+		}
+	}
+	
+}
+
+int WorkerManager::makeSureCinIsRight(int a)
+{
+	while (true)
+	{
+		cin >> a;
+		if (!cin)
+		{
+			cout << "输入错误类型，请重新输入" << endl;
+			cin.clear();
+			//cin.sync();    //清空流
+			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');   //VS用这行代码代替cin.sync()
+		}
+		else
+		{
+			return a;
+		}
 	}
 }
+
+
 
 WorkerManager::~WorkerManager()
 {
