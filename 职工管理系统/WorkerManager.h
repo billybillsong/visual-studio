@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+using namespace std;
 #include "Worker.h"
 #include "Employee.h"
 #include "Manager.h"
@@ -26,9 +28,15 @@ public:
 
 	int  getNumFromFile();	//读文件有几行数据
 
-	void showInfo();
+	void showWorker();
 
 	void initWorkerArray();  //文件有数据初始化WorkerArray
+
+	int isExist(int num);    //查看编号为num的职工是否存在,存在的话返回在wokerArray中的位置
+	
+	void deleteWorker();     //删除职工
+
+	void modifyWorkerInfo();  //修改职工信息
 
 	~WorkerManager();
 

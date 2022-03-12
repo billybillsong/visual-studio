@@ -27,13 +27,19 @@ void main()
 		}
 
 		case 2:		//显示职工信息
-			wm->showInfo();
+			wm->showWorker();
 			system("pause");
 			system("cls");
 			break;
 		case 3:		//删除离职职工
+			wm->deleteWorker();
+			system("pause");
+			system("cls");
 			break;
 		case 4:		//修改职工信息
+			wm->modifyWorkerInfo();
+			system("pause");
+			system("cls");
 			break;
 		case 5:		//查找职工信息
 			break;

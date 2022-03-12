@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 using namespace std;
+#include <string>
 
 
 class Worker
@@ -8,7 +9,9 @@ class Worker
 public:
 	//Worker(int id,string name,int did);
 
-	virtual void DoWork() = 0;
+	virtual void showInfo() = 0;
+
+	
 
 
 public:
