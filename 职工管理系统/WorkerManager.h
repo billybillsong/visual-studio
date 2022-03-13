@@ -40,6 +40,10 @@ public:
 
 	int makeSureCinIsRight(int a);    //确保输入的是int类型，输入其他错误类型会有提示重新输入
 
+	void findWorker();        //查找职工信息
+
+	void SortWorkerArray();    //按照编号排序
+
 
 	~WorkerManager();
 

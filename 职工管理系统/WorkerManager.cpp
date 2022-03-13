@@ -235,6 +235,7 @@ int WorkerManager::isExist(int num)
 	return index;
 }
 
+
 void WorkerManager::deleteWorker()
 {
 	if(this->fileIsEmpty)
@@ -371,6 +372,146 @@ int WorkerManager::makeSureCinIsRight(int a)
 		{
 			return a;
 		}
+	}
+}
+
+void WorkerManager::findWorker()
+{
+	if (this->fileIsEmpty)
+	{
+		cout << "文件不存在或记录为空" << endl;
+		return;
+	}
+	else
+	{
+		//1、按照职工编号查找
+		//2、按照姓名查找
+		cout << "请输入想要查找的方式:" << endl;
+		cout << "1、按照员工编号查找" << endl;
+		cout << "2、按照姓名查找" << endl;
+		int choice = 0;
+		choice = this->makeSureCinIsRight(choice);
+		if (choice == 1)     //按照职工编号查找
+		{
+			cout << "请输入想要查找的职工的员工编号:" << endl;
+			int num = 0;
+			num = this->makeSureCinIsRight(num);
+			int index = this->isExist(num);
+			if (index == -1)  //没找到
+			{
+				cout << "查无此人" << endl;
+				return;
+			}
+			else     //找到了  
+			{
+				cout << "查找成功,员工编号为" << num 
+					<< "号的员工，员工信息为:" << endl;
+				this->workerArray[index]->showInfo();
+			}
+		}
+		else if (choice == 2)  //按照姓名查找
+		{
+			cout << "请输入想要查找的职工的姓名:" << endl;
+			string name = "";
+			cin >> name;
+			bool flag = false;     //查找成功标识  true为查找成功，flase为没找到
+			for (int i = 0; i < this->m_num; i++)
+			{
+				if (this->workerArray[i]->m_Name == name)
+				{
+					cout << "查找成功，员工编号为" << this->workerArray[i]->m_Id
+						<< "号的员工，员工信息为:" << endl;
+					this->workerArray[i]->showInfo();
+					flag = true;
+				}
+			}
+			if (!flag)
+			{
+				cout << "查无此人" << endl;
+				return;
+			}
+		}
+		else
+		{
+			cout << "输入错误" << endl;
+			return;
+		}
+	}
+	
+}
+
+void WorkerManager::SortWorkerArray()
+{
+	if (this->fileIsEmpty)
+	{
+		cout << "文件不存在或记录为空" << endl;
+	}
+	else
+	{
+		for (int i = 0; i < this->m_num -1; i++)
+		{
+			for (int j = 0; j < this->m_num - i - 1; j++)
+			{
+				if (this->workerArray[j]->m_Id > this->workerArray[j + 1]->m_Id)
+				{
+					//位置为j和j+1的对象交换位置
+					Worker * temp_worker = NULL;
+					//temp_worker = this->workerArray[j];
+					switch (this->workerArray[j]->m_DepId)
+					{
+					case EmployeeDepId:
+						temp_worker = new Employee(this->workerArray[j]->m_Id, this->workerArray[j]->m_Name, this->workerArray[j]->m_DepId);
+						break;
+					case ManagerDepId:
+						temp_worker = new Manager(this->workerArray[j]->m_Id, this->workerArray[j]->m_Name, this->workerArray[j]->m_DepId);
+						break;
+					case BossDepId:
+						temp_worker = new Boss(this->workerArray[j]->m_Id, this->workerArray[j]->m_Name, this->workerArray[j]->m_DepId);
+						break;
+					default:
+						break;
+					}
+					delete this->workerArray[j];   //释放this->workerArray[j]空间
+					//给this->workerArray[j]重新分配空间
+
+					switch (this->workerArray[j+1]->m_DepId)
+					{
+					case EmployeeDepId:
+						this->workerArray[j] = new Employee(this->workerArray[j+1]->m_Id, this->workerArray[j + 1]->m_Name, this->workerArray[j + 1]->m_DepId);
+						break;
+					case ManagerDepId:
+						this->workerArray[j] = new Manager(this->workerArray[j + 1]->m_Id, this->workerArray[j + 1]->m_Name, this->workerArray[j + 1]->m_DepId);
+						break;
+					case BossDepId:
+						this->workerArray[j] = new Boss(this->workerArray[j + 1]->m_Id, this->workerArray[j + 1]->m_Name, this->workerArray[j + 1]->m_DepId);
+						break;
+					default:
+						break;
+					}
+					//this->workerArray[j] = this->workerArray[j + 1];
+					delete this->workerArray[j + 1]; //释放this->workerArray[j+1]空间
+					//this->workerArray[j + 1] = temp_worker;
+					//给this->workerArray[j+1]重新分配空间
+					switch (temp_worker->m_DepId)
+					{
+					case EmployeeDepId:
+						this->workerArray[j+1] = new Employee(temp_worker->m_Id, temp_worker->m_Name, temp_worker->m_DepId);
+						break;
+					case ManagerDepId:
+						this->workerArray[j + 1] = new Manager(temp_worker->m_Id, temp_worker->m_Name, temp_worker->m_DepId);
+						break;
+					case BossDepId:
+						this->workerArray[j + 1] = new Boss(temp_worker->m_Id, temp_worker->m_Name, temp_worker->m_DepId);
+						break;
+					default:
+						break;
+					}
+					delete temp_worker;
+				}
+			}
+		}
+		this->save();   //保存到文件
+		cout << "按职工编号从小到大顺序排列成功" << endl;
 	}
 }
 

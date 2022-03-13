@@ -69,8 +69,14 @@ void main()
 			system("cls");
 			break;
 		case 5:		//查找职工信息
+			wm.findWorker();
+			system("pause");
+			system("cls");
 			break;
 		case 6:		//按照编号排序
+			wm.SortWorkerArray();
+			system("pause");
+			system("cls");
 			break;
 		case 7:		//清空所有文档
 			break;
