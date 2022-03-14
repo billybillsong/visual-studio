@@ -575,11 +575,26 @@ void WorkerManager::clearUp()
 	choice = this->makeSureCinIsRight(choice);
 	if (choice == 1)
 	{
-		//清空
-		delete[] this->workerArray;
-		this->m_num = 0;
-		this->fileIsEmpty = true;
-		this->save();
+		//先清空文件
+		ofstream ofs(FileName, ios::trunc);  //删除文件后重新创建 
+		ofs.close();
+		//清空   分布清空，由内而外释放空间
+		if (this->workerArray != NULL)
+		{
+			//删除堆区的每一个职工对象
+			for (int i = 0; i < this->m_num; i++)
+			{
+				delete this->workerArray[i];
+				this->workerArray[i] = NULL;
+			}
+			//删除堆区的数组指针
+			delete[] this->workerArray;
+			this->workerArray = NULL;
+			this->m_num = 0;
+			this->fileIsEmpty = true;
+			//this->save();  //不用这种方法清空文件，逻辑上应该是直接清空文件
+			
+		}
 		cout << "清空成功" << endl;
 	}
 	else
@@ -596,6 +611,11 @@ WorkerManager::~WorkerManager()
 {
 	if (this->workerArray != NULL)
 	{
+		for (int i = 0; i < this->m_num; i++)
+		{
+			delete this->workerArray[i];
+			this->workerArray[i] = NULL;
+		}
 		delete[] this->workerArray;
 		this->workerArray = NULL;
 	}
