@@ -440,7 +440,7 @@ void WorkerManager::findWorker()
 	
 }
 
-void WorkerManager::SortWorkerArray()
+void WorkerManager::BubbleSortWorkerArray()
 {
 	if (this->fileIsEmpty)
 	{
@@ -454,65 +454,140 @@ void WorkerManager::SortWorkerArray()
 			{
 				if (this->workerArray[j]->m_Id > this->workerArray[j + 1]->m_Id)
 				{
-					//位置为j和j+1的对象交换位置
+					//让workerArray j和j+1位置互换
 					Worker * temp_worker = NULL;
-					//temp_worker = this->workerArray[j];
-					switch (this->workerArray[j]->m_DepId)
-					{
-					case EmployeeDepId:
-						temp_worker = new Employee(this->workerArray[j]->m_Id, this->workerArray[j]->m_Name, this->workerArray[j]->m_DepId);
-						break;
-					case ManagerDepId:
-						temp_worker = new Manager(this->workerArray[j]->m_Id, this->workerArray[j]->m_Name, this->workerArray[j]->m_DepId);
-						break;
-					case BossDepId:
-						temp_worker = new Boss(this->workerArray[j]->m_Id, this->workerArray[j]->m_Name, this->workerArray[j]->m_DepId);
-						break;
-					default:
-						break;
-					}
-					delete this->workerArray[j];   //释放this->workerArray[j]空间
-					//给this->workerArray[j]重新分配空间
+					temp_worker = this->workerArray[j];
+					this->workerArray[j] = this->workerArray[j + 1];
+					this->workerArray[j + 1] = temp_worker;
+					////位置为j和j+1的对象交换位置
+					//Worker * temp_worker = NULL;
+					////temp_worker = this->workerArray[j];
+					//switch (this->workerArray[j]->m_DepId)
+					//{
+					//case EmployeeDepId:
+					//	temp_worker = new Employee(this->workerArray[j]->m_Id, this->workerArray[j]->m_Name, this->workerArray[j]->m_DepId);
+					//	break;
+					//case ManagerDepId:
+					//	temp_worker = new Manager(this->workerArray[j]->m_Id, this->workerArray[j]->m_Name, this->workerArray[j]->m_DepId);
+					//	break;
+					//case BossDepId:
+					//	temp_worker = new Boss(this->workerArray[j]->m_Id, this->workerArray[j]->m_Name, this->workerArray[j]->m_DepId);
+					//	break;
+					//default:
+					//	break;
+					//}
+					//delete this->workerArray[j];   //释放this->workerArray[j]空间
+					////给this->workerArray[j]重新分配空间
 
-					switch (this->workerArray[j+1]->m_DepId)
-					{
-					case EmployeeDepId:
-						this->workerArray[j] = new Employee(this->workerArray[j+1]->m_Id, this->workerArray[j + 1]->m_Name, this->workerArray[j + 1]->m_DepId);
-						break;
-					case ManagerDepId:
-						this->workerArray[j] = new Manager(this->workerArray[j + 1]->m_Id, this->workerArray[j + 1]->m_Name, this->workerArray[j + 1]->m_DepId);
-						break;
-					case BossDepId:
-						this->workerArray[j] = new Boss(this->workerArray[j + 1]->m_Id, this->workerArray[j + 1]->m_Name, this->workerArray[j + 1]->m_DepId);
-						break;
-					default:
-						break;
-					}
-					//this->workerArray[j] = this->workerArray[j + 1];
-					delete this->workerArray[j + 1]; //释放this->workerArray[j+1]空间
-					//this->workerArray[j + 1] = temp_worker;
-					//给this->workerArray[j+1]重新分配空间
-					switch (temp_worker->m_DepId)
-					{
-					case EmployeeDepId:
-						this->workerArray[j+1] = new Employee(temp_worker->m_Id, temp_worker->m_Name, temp_worker->m_DepId);
-						break;
-					case ManagerDepId:
-						this->workerArray[j + 1] = new Manager(temp_worker->m_Id, temp_worker->m_Name, temp_worker->m_DepId);
-						break;
-					case BossDepId:
-						this->workerArray[j + 1] = new Boss(temp_worker->m_Id, temp_worker->m_Name, temp_worker->m_DepId);
-						break;
-					default:
-						break;
-					}
-					delete temp_worker;
+					//switch (this->workerArray[j+1]->m_DepId)
+					//{
+					//case EmployeeDepId:
+					//	this->workerArray[j] = new Employee(this->workerArray[j+1]->m_Id, this->workerArray[j + 1]->m_Name, this->workerArray[j + 1]->m_DepId);
+					//	break;
+					//case ManagerDepId:
+					//	this->workerArray[j] = new Manager(this->workerArray[j + 1]->m_Id, this->workerArray[j + 1]->m_Name, this->workerArray[j + 1]->m_DepId);
+					//	break;
+					//case BossDepId:
+					//	this->workerArray[j] = new Boss(this->workerArray[j + 1]->m_Id, this->workerArray[j + 1]->m_Name, this->workerArray[j + 1]->m_DepId);
+					//	break;
+					//default:
+					//	break;
+					//}
+					////this->workerArray[j] = this->workerArray[j + 1];
+					//delete this->workerArray[j + 1]; //释放this->workerArray[j+1]空间
+					////this->workerArray[j + 1] = temp_worker;
+					////给this->workerArray[j+1]重新分配空间
+					//switch (temp_worker->m_DepId)
+					//{
+					//case EmployeeDepId:
+					//	this->workerArray[j+1] = new Employee(temp_worker->m_Id, temp_worker->m_Name, temp_worker->m_DepId);
+					//	break;
+					//case ManagerDepId:
+					//	this->workerArray[j + 1] = new Manager(temp_worker->m_Id, temp_worker->m_Name, temp_worker->m_DepId);
+					//	break;
+					//case BossDepId:
+					//	this->workerArray[j + 1] = new Boss(temp_worker->m_Id, temp_worker->m_Name, temp_worker->m_DepId);
+					//	break;
+					//default:
+					//	break;
+					//}
+					//delete temp_worker;
 				}
 			}
 		}
 		this->save();   //保存到文件
 		cout << "按职工编号从小到大顺序排列成功" << endl;
 	}
+}
+
+void WorkerManager::SelectSortWorkerArray()
+{
+	if (this->fileIsEmpty)
+	{
+		cout << "文件不存在或记录为空" << endl;
+	}
+	else
+	{
+		cout << "请输入排序方式:" << endl;
+		cout << "1、升序排序" << endl;
+		cout << "2、降序排序" << endl;
+		int select = 0;
+		select = this->makeSureCinIsRight(select);
+		int MinOrMax = 0;
+		for (int i = 0; i < this->m_num; i++)
+		{
+			MinOrMax = i;   //MinOrMax先初始化为第一个数
+			for (int j = i + 1; j < this->m_num; j++)
+			{
+				if (select == 1)
+				{
+					//升序  找最小的
+					if (this->workerArray[MinOrMax]->m_Id > this->workerArray[j]->m_Id)
+					{
+						MinOrMax = j;
+					}
+				}
+				else
+				{
+					//降序  找最大的
+					if (this->workerArray[MinOrMax]->m_Id < this->workerArray[j]->m_Id)
+					{
+						MinOrMax = j;
+					}
+				}
+			}
+			//交换操作
+			Worker * temp_worker = NULL;
+			temp_worker = this->workerArray[i];
+			this->workerArray[i] = this->workerArray[MinOrMax];
+			this->workerArray[MinOrMax] = temp_worker;
+		}
+		this->save();
+		cout << "按照编号排序成功" << endl;
+	}
+}
+
+void WorkerManager::clearUp()
+{
+	cout << "是否真的要清空职工记录？" << endl;
+	cout << "请按1确认,按其他数字取消" << endl;
+	int choice = 0;
+	choice = this->makeSureCinIsRight(choice);
+	if (choice == 1)
+	{
+		//清空
+		delete[] this->workerArray;
+		this->m_num = 0;
+		this->fileIsEmpty = true;
+		this->save();
+		cout << "清空成功" << endl;
+	}
+	else
+	{
+		cout << "取消成功" << endl;
+	}
+
+
 }
 
 

@@ -42,7 +42,11 @@ public:
 
 	void findWorker();        //查找职工信息
 
-	void SortWorkerArray();    //按照编号排序
+	void BubbleSortWorkerArray();    //冒泡排序按照升序排序
+
+	void SelectSortWorkerArray();    //选择排序按照用户意图进行升序或降序排序
+
+	void clearUp();                   //清空所有文档
 
 
 	~WorkerManager();

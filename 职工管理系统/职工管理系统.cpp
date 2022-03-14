@@ -74,11 +74,14 @@ void main()
 			system("cls");
 			break;
 		case 6:		//按照编号排序
-			wm.SortWorkerArray();
+			wm.SelectSortWorkerArray();
 			system("pause");
 			system("cls");
 			break;
 		case 7:		//清空所有文档
+			wm.clearUp();
+			system("pause");
+			system("cls");
 			break;
 		default:
 			system("cls");
